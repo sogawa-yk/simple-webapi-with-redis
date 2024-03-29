@@ -14,3 +14,9 @@ class RedisClient():
 
   def setex(self, key, value, ttl):
     return self.connection.setex(key, ttl, value)
+  
+  def set(self, key, value, ttl):
+    return self.connection.set(key, ttl, value)
+  
+  def flushall(self):
+    return self.connection.flushall()
