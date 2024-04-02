@@ -61,6 +61,32 @@ async def get_sorted_all_data_cache():
     return query_data_use_cache(adb_client, redis_client, sql_query)
 
 
+@app.get("/sorted-100-data-nocache")
+async def get_sorted_100_data_nocache():
+    # キャッシュを利用しない場合
+    sql_query = "SELECT product_name, price, stock_quantity \
+                FROM ( \
+                SELECT product_name, price, stock_quantity \
+                FROM products \
+                ORDER BY price DESC, stock_quantity DESC \
+                ) \
+                FETCH FIRST 100 ROWS ONLY"
+    return query_data(adb_client, redis_client, sql_query)
+
+
+@app.get("/sorted-100-data-cache")
+async def get_sorted_100_data_cache():
+    # キャッシュを利用する場合
+    sql_query = "SELECT product_name, price, stock_quantity \
+                FROM ( \
+                SELECT product_name, price, stock_quantity \
+                FROM products \
+                ORDER BY price DESC, stock_quantity DESC \
+                ) \
+                FETCH FIRST 100 ROWS ONLY"
+    return query_data_use_cache(adb_client, redis_client, sql_query)
+
+
 @app.get("/flushall")
 async def flushall():
     return redis_client.flushall()
