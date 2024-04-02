@@ -37,8 +37,8 @@ async def get_conditional_data_cache():
     return query_data_use_cache(adb_client, redis_client, sql_query)
 
 
-@app.get("/sorted-db-columns-nocache")
-async def get_sorted_db_columns_nocache():
+@app.get("/sorted-all-data-nocache")
+async def get_sorted_all_data_nocache():
     # キャッシュを利用しない場合
     sql_query = "SELECT product_name, price, stock_quantity \
                 FROM ( \
@@ -49,8 +49,8 @@ async def get_sorted_db_columns_nocache():
     return query_data(adb_client, redis_client, sql_query)
 
 
-@app.get("/sorted-db-columns-cache")
-async def get_sorted_db_columns_cache():
+@app.get("/sorted-all-data-cache")
+async def get_sorted_all_data_cache():
     # キャッシュを利用する場合
     sql_query = "SELECT product_name, price, stock_quantity \
                 FROM ( \
