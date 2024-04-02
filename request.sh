@@ -4,13 +4,13 @@
 startTime=$(date +%s)
 
 # 実行するリクエストの数
-requestCount=10000
+requestCount=100
 
 # 対象のURL
-url="http://217.142.255.73/db-columns-cache"
+url="http://138.2.40.146/sorted-db-columns-cache"
 
 # 同時実行するプロセスの数
-concurrentTasks=10000
+concurrentTasks=100
 
 # タスクを格納するための配列
 declare -a tasks

@@ -8,6 +8,8 @@ cert_path = "/app/cert.json"
 adb_client = AdbClient(cert_path)
 redis_client = RedisClient(cert_path)
 
+
+
 @app.get("/db-columns-nocache")
 async def get_db_columns_nocache():
     # キャッシュを利用しない場合
@@ -21,3 +23,30 @@ async def get_db_columns_cache():
     # キャッシュを利用する場合
     sql_query = "SELECT * FROM PRODUCTS FETCH FIRST 100 ROWS ONLY"
     return query_data_use_cache(adb_client, redis_client, sql_query)
+
+
+@app.get("/sorted-db-columns-nocache")
+async def get_sorted_db_columns_nocache():
+    # キャッシュを利用しない場合
+    sql_query = "SELECT product_name, price, stock_quantity \
+                FROM ( \
+                SELECT product_name, price, stock_quantity \
+                FROM products \
+                ORDER BY price DESC, stock_quantity DESC \
+                ) \
+                FETCH FIRST 100 ROWS ONLY"
+    return query_data(adb_client, redis_client, sql_query)
+
+@app.get("/sorted-db-columns-cache")
+async def get_sorted_db_columns_cache():
+    # キャッシュを利用する場合
+    sql_query = "SELECT product_name, price, stock_quantity \
+                FROM ( \
+                SELECT product_name, price, stock_quantity \
+                FROM products \
+                ORDER BY price DESC, stock_quantity DESC \
+                ) \
+                FETCH FIRST 100 ROWS ONLY"
+    return query_data_use_cache(adb_client, redis_client, sql_query)
+
+
